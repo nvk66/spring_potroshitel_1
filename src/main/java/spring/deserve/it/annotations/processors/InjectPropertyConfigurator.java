@@ -13,16 +13,18 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
-public class InjectPropertyProcessor {
+public class InjectPropertyConfigurator implements Configurator {
 
+    @Override
     @SneakyThrows
-    public static void injectProperty(Object object) {
+    public Object configure(Object object) {
         for (var field : getAllFields(object.getClass())) {
             if (field.isAnnotationPresent(InjectProperty.class)) {
                 field.setAccessible(true);
                 field.set(object, getProperty(field));
             }
         }
+        return object;
     }
 
     private static Object getProperty(Field field) {
@@ -81,4 +83,5 @@ public class InjectPropertyProcessor {
         }
         return classes;
     }
+
 }
